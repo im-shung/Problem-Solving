@@ -1,10 +1,10 @@
 import sys
 import heapq
-sys.stdin = open("sample_input.txt","r")
 N = int(sys.stdin.readline().strip())
 hq = []
 for _ in range(N):
-    s = list(sys.stdin.readline().split())
-    for i in range(N):
-        heapq.heappush(hq,int(s[i]))
-print(heapq.nlargest(N,hq)[-1])
+    for i in list(sys.stdin.readline().split()):
+        heapq.heappush(hq,int(i))
+        if len(hq) > N: # 메모리 초과 방지
+            heapq.heappop(hq)
+print(min(hq))
