@@ -1,12 +1,9 @@
 import sys  
-# input = sys.stdin.readline
-sys.stdin = open("sample_input.txt", "r")
-
+input = sys.stdin.readline
 n = int(input())
 A = list(map(int,input().split()))
 A.sort(key = lambda x: abs(x))
-# print(A)
-result = 200001
+result = (10**9)*2 + 1
 x=0;y=0
 l = 1; r = n-1
 tag = 0
@@ -26,4 +23,4 @@ while l<=r:
 tmp = []
 tmp.append(x);tmp.append(y)
 tmp.sort()
-print(*tmp)
+print(*tmp)    
