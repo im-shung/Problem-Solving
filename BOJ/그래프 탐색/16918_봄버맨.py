@@ -1,8 +1,6 @@
 from collections import deque
 import sys
-# input = sys.stdin.readline
-
-sys.stdin = open("sample_input.txt", "r")
+input = sys.stdin.readline
 
 moves = [(1,0),(-1,0),(0,1),(0,-1)]
 def bfs():
@@ -28,7 +26,7 @@ def bfs():
                     map[i][j] = 'O' 
                     
 r,c,n = map(int,input().split())
-map = [list(input()) for _ in range(r)] # 0초
+map = [list(input().strip()) for _ in range(r)] # 0초
 time = 1 # 1초 후
 Q = deque()
 if n > 1:
