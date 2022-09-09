@@ -14,7 +14,7 @@ def solution(n, info):
         tmp_ans = [0 for _ in range(k)]
 
         c = Counter(c)
-        
+        print(c)
         for i in range(k):
             if info[i] < c[i]: # 개수가 더 많으면 라이언이 승
                 ryan += i
