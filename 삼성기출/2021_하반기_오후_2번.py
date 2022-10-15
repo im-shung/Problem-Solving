@@ -76,7 +76,6 @@ def press():
     arr = tmp
     
 
-
 def fold():
     global arr
     
@@ -116,4 +115,5 @@ def pro():
         mn = min(arr)
         if mx - mn <= k:
             break
+    print(cnt)
 pro()
