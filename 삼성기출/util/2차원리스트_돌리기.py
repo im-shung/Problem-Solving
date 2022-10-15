@@ -2,13 +2,13 @@ arr = [[1,2,3,4,5],[6,7,8,9,10],[11,12,13,14,15]
        ,[16,17,18,19,20],
        [21,22,23,24,25]]
 
-def print_arr():
-    for i in arr:
+def print_arr(A):
+    for i in A:
         print(i) 
 
 print("----------------------------------")
 print("기존 리스트")
-print_arr() 
+print_arr(arr) 
 
 def rotated(arr):
     print("----------------------------------")
@@ -22,20 +22,20 @@ def rotated(arr):
             result[j][n - 1 - i] = arr[i][j]    
             
     arr = result
-    print_arr() 
+    print_arr(arr) 
     
 
 def rotate_clock(arr):
     print("----------------------------------")
     print("zip 사용해 시계 방향으로 90도 돌리기")
     arr = list(map(list, zip(*arr[::-1])))
-    print_arr() 
+    print_arr(arr) 
         
 def rotate_clock_convert(arr):        
     print("----------------------------------")
     print("zip 사용해 반시계 방향으로 90도 돌리기")
     arr = list(map(list, zip(*arr)))[::-1]
-    print_arr() 
+    print_arr(arr) 
         
 def rotate_mid_clock_convert(arr):
     print("----------------------------------")
@@ -53,7 +53,7 @@ def rotate_mid_clock_convert(arr):
     arr[n//2] = tmp_c
     for i in range(n):
         arr[i][n//2] = tmp_r[i]
-    print_arr() 
+    print_arr(arr) 
 
 
 def rote_clock_etc(arr):
@@ -80,9 +80,10 @@ def rote_clock_etc(arr):
     rotate_etc(m + 1, 0, n - 1, m - 1, m)
     rotate_etc(m + 1, m + 1, n - 1, n - 1, m)
     
-    print_arr() 
+    print_arr(arr) 
 
-rotate_clock(arr)
-rotate_clock_convert(arr)
-rotate_mid_clock_convert(arr)
-rote_clock_etc(arr)
+rotated(arr)
+# rotate_clock(arr)
+# rotate_clock_convert(arr)
+# rotate_mid_clock_convert(arr)
+# rote_clock_etc(arr)
