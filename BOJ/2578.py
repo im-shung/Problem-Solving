@@ -1,6 +1,3 @@
-import sys
-sys.stdin = open("C:\Program_study\AlgorithmStudy\sample_input.txt", "r")
-
 from _collections import defaultdict
 
 diag = [(0 ,0), (1, 1), (2, 2), (3, 3), (4, 4)]
@@ -48,7 +45,7 @@ def sol():
             result += 1
 
         if (not r in horizontal_visit) and horizontal(r):
-            horizontal_visit.append(c)
+            horizontal_visit.append(r)
             result += 1
 
         if (not diagonal_visit) and diagonal(diag):
