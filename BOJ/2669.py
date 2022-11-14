@@ -1,59 +1,23 @@
-import sys
-sys.stdin = open("../sample_input.txt", "r")
-
-
-def is_include(A, B):
-    left_x1, left_y1, right_x1, right_y1 = A
-    left_x2, left_y2, right_x2, right_y2 = B
-
-    if left_x2 <= left_x1 <= right_x2 and \
-            left_x2 <= right_x1 <= right_y2 and \
-            left_y2 <= left_y1 <= right_y2 and \
-            left_y2 <= right_y1 <= right_y2:
-        return True
-
-
-def is_overlap(A, B):
-    left_x1, left_y1, right_x1, right_y1 = A
-    left_x2, left_y2, right_x2, right_y2 = B
-
-    if left_x2 <= left_x1 <= right_x2:
-        if left_y2 <= left_y1 <= right_y2:
-            return get_sum(left_x1, left_y1, right_x2, right_y2)
-        elif left_y2 <= right_y1 <= right_y2:
-            return get_sum(left_x1, left_y2, right_x1, right_y2)
-    else:
-        if left_x2 <= right_x1 <= right_x2:
-            if left_y2 <= left_y1 <= right_y2:
-                return get_sum(left_x2, left_y1, right_x1, right_y2)
-            elif left_y2 <= right_y1 <= right_y2:
-                return get_sum(left_x2, left_y2, right_x1, right_y1)
-
-    return False
-def get_sum(x1, y1, x2, y2):
-    return (x2 - x1) * (y2 - y1)
-
 if __name__ == '__main__':
+    n, m = 0, 0
     arr = []
-    sum_arr = []
     for i in range(4):
         x1, y1, x2, y2 = map(int, input().split())
         arr.append((x1, y1, x2, y2))
-        sum_arr.append(get_sum(x1, y1, x2, y2))
+        n = max(x1, x2, n)
+        m = max(y1, y2, m)
 
-    result = sum(sum_arr)
-    memo = [[]] * 4
-    for i in range(4):
-        for j in range(4):
-            if i == j: continue
-            if j in memo[i]: continue
-            if is_include(arr[i], arr[j]):
-                result -= sum_arr[j]
-            else:
-                temp = is_overlap(arr[i], arr[j])
-                if temp:
-                    result -= temp
+    matrix = [[0 for _ in range(n + 1)] for _ in range(m + 1)]
 
-            memo[i].append(j)
+    for x1, y1, x2, y2 in arr:
+        for i in range(m - y2, m - y1, 1):
+            for j in range(x1, x2, 1):
+                matrix[i][j] = 1
 
-    print(result)
+    # 1로 표시한 부분만 더해주면 그게 넓이
+    ans = 0
+    for i in range(m + 1):
+        for j in range(n + 1):
+            if matrix[i][j]:
+                ans += 1
+    print(ans)
