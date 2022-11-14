@@ -1,6 +1,3 @@
-import sys
-sys.stdin = open("C:\Program_study\AlgorithmStudy\sample_input.txt", "r")
-
 import heapq
 
 dr = [1, 0, -1, 0]
@@ -27,7 +24,7 @@ def dijkstra(dist, start_x, start_y):
 
 if __name__ == '__main__':
     t = 0
-    INF = sys.maxsize
+    INF = 1e9
     while True:
         n = int(input())
         if not n:
