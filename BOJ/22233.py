@@ -5,15 +5,10 @@ input = sys.stdin.readline
 
 if __name__ == '__main__':
     N, M = map(int, input().split())
-    memo = dict()
-    for _ in range(N):
-        memo[input().rstrip()] = 1
-
-    res = N
-    for _ in range(M):
-        S = sorted(input().rstrip().split(","))
-        for s in S:
-            if s in memo.keys():
-                res -= 1
-                memo.pop(s)
-        print(res)
+    inputs = sys.stdin.read().split()
+    keywords = set(inputs[:N])
+    blogs = inputs[N:]
+    for blog in blogs:
+        words = set(blog.split(","))
+        keywords -= words
+        print(len(keywords))
