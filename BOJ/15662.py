@@ -17,7 +17,6 @@ for _ in range(k):
     number -= 1
 
     dl, dr = direction, direction
-    flag_l, flag_r = False, False
     left_list, right_list = [0] * t, [0] * t
 
     for i in range(t):
@@ -26,23 +25,21 @@ for _ in range(k):
 
     # 왼쪽 톱니바퀴
     for i in range(number, 0, -1):
-        if flag_l: break
         mid = left_list[i]
         left = right_list[i - 1]
         if left != mid:
             dl = -dl
             queue_list[i - 1].rotate(dl)
-        else: flag_l = True
+        else: break
 
     # 오른쪽 톱니바퀴
     for i in range(number, t - 1, 1):
-        if flag_r: break
         mid = right_list[i]
         right = left_list[i + 1]
         if right != mid:
             dr = -dr
             queue_list[i + 1].rotate(dr)
-        else: flag_r = True
+        else: break
 
     queue_list[number].rotate(direction)
 
