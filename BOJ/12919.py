@@ -1,19 +1,23 @@
-import sys
-sys.stdin = open("C:\Program_study\AlgorithmStudy\sample_input.txt", "r")
+def sol(A):
+    global result
 
-def dfs(a):
-    if a == s:
-        return 1
+    if len(A) == 0:
+        return
 
-    if len(a) == 0: return 0
+    if A == S:
+        result = 1
+        return
 
-    if a[-1] == "A":
-        dfs(a[:-1])
-    if a[0] == "B":
-        dfs(a[1:][::-1])
+    if A[-1] == 'A':
+        sol(A[:-1])
 
-if __name__ == '__main__':
-    s = list(input())
-    t = list(input())
+    tmp = A[::][::-1]
+    if tmp[-1] == 'B':
+        sol(tmp[:-1])
 
-    print(dfs(t))
+S = input()
+T = input()
+
+result = 0
+sol(T)
+print(result)
