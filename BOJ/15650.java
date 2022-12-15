@@ -15,7 +15,7 @@ public class Main {
 
         arr = new int[M];
 
-        dfs(0, -1);
+        dfs(0, 1);
         System.out.println(sb);
 
     }
@@ -31,12 +31,9 @@ public class Main {
             return;
         }
 
-        for (int i = 0; i < N; i++) {
-            // 만약 해당 노드를 방문하지 않았다면?
-            if (i > key) {
-                arr[depth] = i + 1;     // 해당 깊이를 index로 하며 i + 1 값 저장
-                dfs(depth + 1, i);   // 다음 자식 노드 방문을 위해 depth + 1 증가시키면서 재귀호출
-            }
+        for (int i = key; i <= N; i++) {
+            arr[depth] = i;          // 해당 깊이를 index로 하며 i + 1 값 저장
+            dfs(depth + 1, i + 1);   // 다음 자식 노드 방문을 위해 depth + 1 증가시키면서 재귀호출
         }
     }
 
