@@ -17,30 +17,27 @@ public class Main {
     static int[] dc = {0, 0, 1, -1};
 
     static int N, M;
-    static int[][] matrix;
+    static char[][] matrix;
     static boolean[][] visit;
 
     public static void main(String[] args) throws IOException, ParseException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-       
+      
         StringTokenizer st = new StringTokenizer(br.readLine());
 
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
 
-        matrix = new int [N][M];
+        matrix = new char [N][];
         visit = new boolean [N][M];
 
         for (int i = 0; i < N; i++) {
-            String[] line = br.readLine().split("");
-            for (int j = 0; j < M; j++) {
-                matrix[i][j] = Integer.parseInt(line[j]);
-            }
+            matrix[i] =  br.readLine().toCharArray();
         }
 
         String result = "NO";
         for (int i = 0; i < M; i++) {
-            if (matrix[0][i] == 0 && !visit[0][i]) {
+            if (matrix[0][i] == '0' && !visit[0][i]) {
                 if (bfs(0, i)){
                     result = "YES";
                     break;
@@ -79,7 +76,7 @@ public class Main {
                     continue;
 
                 // 전류를 차단하는 검은색 격자인가??
-                if (matrix[next.x][next.y] == 1)
+                if (matrix[next.x][next.y] == '1')
                     continue;
 
                 queue.add(next);
