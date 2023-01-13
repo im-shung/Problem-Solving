@@ -1,13 +1,24 @@
-import java.awt.Point;
 import java.io.*;
 import java.util.*;
 
 /*
 Tree 트리
-"Root" 를 시작으로 하는 그래프 탐색 문제
+
 탐색 알고리즘: BFS 또는 DFS
 인접 리스트를 쓴다면 O(V+E)
  */
+
+
+class Edge {
+
+    int node;
+    int dist; // node 사이의 거리
+
+    public Edge(int node, int dist) {
+        this.node = node;
+        this.dist = dist;
+    }
+}
 
 public class Main {
 
@@ -16,11 +27,10 @@ public class Main {
     static StringBuilder sb = new StringBuilder();
 
     static int N, M;
-    static ArrayList<Point>[] adj;
+    static ArrayList<Edge>[] adj;
     static boolean[] visit;
 
     static void input() throws IOException {
-   
         st = new StringTokenizer(br.readLine());
 
         N = Integer.parseInt(st.nextToken());
@@ -40,37 +50,41 @@ public class Main {
             int a = Integer.parseInt(st.nextToken());
             int b = Integer.parseInt(st.nextToken());
             int dist = Integer.parseInt(st.nextToken());
-            // 누가 자식이고 부모인지 모르는 상태로 시작한다.
-            adj[a].add(new Point(b, dist));
-            adj[b].add(new Point(a, dist));
+            adj[a].add(new Edge(b, dist));
+            adj[b].add(new Edge(a, dist));
         }
     }
-
 
     // dfs(x, goal)  := 정점 x 에서 출발해서 정점 goal에 도달할 때까지의 거리(dist)를 더해가는 함수
     static void dfs(int x, int goal, int dist) {
         visit[x] = true;
 
+        // 목표 정점에 도달했는가??
         if (x == goal) {
             sb.append(dist).append("\n");
             return;
         }
 
-        for (Point vertex : adj[x]) {
-            if (vertex.x == x || visit[vertex.x]) {
+        // x와 연결된 노드들을 탐색한다.
+        for (Edge vertex : adj[x]) {
+            // 이미 방문했는가??
+            if (visit[vertex.node]) {
                 continue;
             }
-            dfs(vertex.x, goal, dist + vertex.y);
+
+            // 현재 노드를 출발점으로, 이전 dist와 현재 dist 를 더해서 dfs()를 호출한다.
+            dfs(vertex.node, goal, dist + vertex.dist);
         }
     }
 
     static void pro() throws IOException {
-        // 1번 정점이 ROOT 이므로, 여기서 시작해서 Tree의 구조를 파악하자.
         for (int i = 0; i < M; i++) {
             st = new StringTokenizer(br.readLine());
-            visit = new boolean[N + 1];
             int x = Integer.parseInt(st.nextToken());
             int goal = Integer.parseInt(st.nextToken());
+
+            // 방문 배열은 매번 초기화한다.
+            visit = new boolean[N + 1];
             dfs(x, goal, 0);
         }
 
