@@ -15,66 +15,68 @@ public class Main {
 
     static int T, N, M;
 
-    static int[] A, B;
+    static int[] inputA, inputB;
 
-    static Long[] P1, P2;
+    static Long[] subA, subB;
 
     static void input() throws IOException {
-//        br = new BufferedReader(new FileReader(new File("src/sds/input.txt")));
         T = Integer.parseInt(br.readLine());
 
         N = Integer.parseInt(br.readLine());
-        A = new int[N];
-        P1 = new Long[(N * (N + 1)) / 2];
+        inputA = new int[N];
+        subA = new Long[(N * (N + 1)) / 2];
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < N; i++) {
-            A[i] = Integer.parseInt(st.nextToken());
+            inputA[i] = Integer.parseInt(st.nextToken());
         }
 
         M = Integer.parseInt(br.readLine());
-        B = new int[M];
-        P2 = new Long[(M * (M + 1)) / 2];
+        inputB = new int[M];
+        subB = new Long[(M * (M + 1)) / 2];
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < M; i++) {
-            B[i] = Integer.parseInt(st.nextToken());
+            inputB[i] = Integer.parseInt(st.nextToken());
         }
-
-
     }
 
     static void pro() {
         // 부 배열 만들기
         makeSubArray();
 
-        Arrays.sort(P1, Comparator.naturalOrder()); // A의 부 배열을 오름차순 정렬
-        Arrays.sort(P2, Comparator.reverseOrder()); // B의 부 배열을 내림차순 정렬
+        Arrays.sort(subA); // A의 부 배열을 오름차순 정렬
+        Arrays.sort(subB, Comparator.reverseOrder()); // B의 부 배열을 내림차순 정렬
 
         // 포인터
-        int p1 = 0;
-        int p2 = 0;
+        int ptA = 0;
+        int ptB = 0;
 
         long result = 0;
         while (true) {
-            long sum = P1[p1] + P2[p2];
-            if (sum == T) {
-                // 배열에서 동일값의 개수
-                // 정렬되어있기 떄문에 찾기 쉽다.
-                long idxA = getCount(p1, P1);
-                long idxB = getCount(p2, P2);
+            long currentA = subA[ptA];
+            long target = T - currentA;
 
-                // 부 배열 쌍의 개수를 더한다.
-                result += idxA * idxB;
+            if (subB[ptB] > target) {
+                ptB++;
+            } else if (subB[ptB] < target) {
+                ptA++;
+            } else { // target == subB[ptB]
+                long countA = 0;
+                long countB = 0;
 
-                // 동일값의 개수만큼 점프한다.
-                p1 += idxA;
-                p2 += idxB;
-            } else if (sum > T) {
-                p2 += 1;
-            } else { // sum < T
-                p1 += 1;
+                while (ptA < subA.length && subA[ptA] == currentA) {
+                    ptA++;
+                    countA++;
+                }
+
+                while(ptB < subB.length && subB[ptB] == target) {
+                    ptB++;
+                    countB++;
+                }
+
+                result += countA * countB;
             }
 
-            if (p1 == P1.length || p2 == P2.length) {
+            if (ptA == subA.length || ptB == subB.length) {
                 break;
             }
         }
@@ -82,26 +84,74 @@ public class Main {
         System.out.println(result);
     }
 
-    private static int getCount(int p, Long[] I) {
-        int idx = 1;
-        while ((p + idx < I.length) && Objects.equals(I[p], I[p + idx])) {
-            idx++;
-        }
-        return idx;
-    }
+//    static void pro2() {
+//        List<Long> subA = new ArrayList<>();
+//        List<Long> subB = new ArrayList<>();
+//
+//        for (int i = 0; i < N; i++) {
+//            long sum = inputA[i];
+//            subA.add(sum);
+//            for (int j = i + 1; j < N; j++) {
+//                sum += inputA[j];
+//                subA.add(sum);
+//            }
+//        }
+//
+//        for (int i = 0; i < M; i++) {
+//            long sum = inputB[i];
+//            subB.add(sum);
+//            for (int j = i + 1; j < M; j++) {
+//                sum += inputB[j];
+//                subB.add(sum);
+//            }
+//        }
+//
+//        Collections.sort(subA);
+//        Collections.sort(subB, Comparator.reverseOrder());
+//
+//        long result = 0;
+//        int ptA = 0, ptB = 0;
+//
+//        while (true) {
+//            long currentA = subA.get(ptA);
+//            long target = T - currentA;
+//            if (subB.get(ptB) > target) {
+//                ptB++;
+//            } else if (subB.get(ptB) < target) {
+//                ptA++;
+//            } else { // target == currentB
+//                long countA = 0;
+//                long countB = 0;
+//                while (ptA < subA.size() && subA.get(ptA) == currentA) {
+//                    ptA++;
+//                    countA++;
+//                }
+//                while (ptB < subB.size() && subB.get(ptA) == target) {
+//                    ptB++;
+//                    countB++;
+//                }
+//
+//                result += countA * countB;
+//            }
+//
+//            if (ptA == subA.size() || ptB == subB.size()) {
+//                break;
+//            }
+//        }
+//    }
 
     static void makeSubArray() {
         int count = 0;
         // P1 만들기
         for (int i = 0; i < N; i++) {
-            long sum = A[i];
+            long sum = inputA[i];
             for (int j = i; j < N; j++) {
                 if (i == j) {
-                    P1[count++] = sum;
+                    subA[count++] = sum;
                 } else {
-                    sum += A[j];
-                    P1[count] = sum;
-                    if (count < P1.length - 1) {
+                    sum += inputA[j];
+                    subA[count] = sum;
+                    if (count < subA.length - 1) {
                         count++;
                     }
                 }
@@ -111,14 +161,14 @@ public class Main {
         // P2 만들기
         count = 0;
         for (int i = 0; i < M; i++) {
-            long sum = B[i];
+            long sum = inputB[i];
             for (int j = i; j < M; j++) {
                 if (i == j) {
-                    P2[count++] = sum;
+                    subB[count++] = sum;
                 } else {
-                    sum += B[j];
-                    P2[count] = sum;
-                    if (count < P2.length - 1) {
+                    sum += inputB[j];
+                    subB[count] = sum;
+                    if (count < subB.length - 1) {
                         count++;
                     }
                 }
@@ -131,3 +181,4 @@ public class Main {
         pro();
     }
 }
+
