@@ -13,7 +13,7 @@ public class Main {
 
     static int N, W;
 
-    static List<List<Integer>> adj;
+    static int[] adj;
 
     static int count;
 
@@ -23,26 +23,23 @@ public class Main {
         N = Integer.parseInt(st.nextToken());
         W = Integer.parseInt(st.nextToken());
 
-        adj = new ArrayList<>();
-        for (int i = 1; i <= 500_001; i++) {
-            adj.add(new ArrayList<>());
-        }
+        adj = new int[N + 1];
     }
 
     static void pro() throws IOException {
         // 간선의 개수는 N-1
         for (int i = 0; i < N - 1; i++) {
             st = new StringTokenizer(br.readLine());
-            int a = Integer.parseInt(st.nextToken());
-            int b = Integer.parseInt(st.nextToken());
+            int u = Integer.parseInt(st.nextToken());
+            int v = Integer.parseInt(st.nextToken());
 
-            adj.get(a).add(b);
-            adj.get(b).add(a);
+            adj[u]++;
+            adj[v]++;
         }
 
         // 리프 노드의 개수 판단
         for (int i = 2; i <= N; i++) {
-            if (adj.get(i).size() == 1) {
+            if (adj[i] == 1) {
                 count++;
             }
         }
