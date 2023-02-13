@@ -1,0 +1,8 @@
+-- 코드를 입력하세요
+-- 과일 성분 & 주문량 3,000 초과 & 총 주문량 내림차순
+SELECT FH.FLAVOR 
+    FROM FIRST_HALF AS FH, ICECREAM_INFO AS II 
+    WHERE FH.FLAVOR = II.FLAVOR 
+        AND II.INGREDIENT_TYPE = 'fruit_based' 
+        AND FH.TOTAL_ORDER > 3000
+    ORDER BY TOTAL_ORDER DESC
