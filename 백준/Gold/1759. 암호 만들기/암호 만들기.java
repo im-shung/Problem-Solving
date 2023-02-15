@@ -1,89 +1,87 @@
+import java.io.*;
+import java.util.*;
+
+// DFS 응용
+
 /*
-암호는 서로 다른 L개의 알파벳 소문자들로 구성되며 최소 한 개의 모음(a, e, i, o, u)과 최소 두 개의 자음으로 구성되어 있다고 알려져 있다.
-또한 정렬된 문자열을 선호하는 조교들의 성향으로 미루어 보아 암호를 이루는 알파벳이 암호에서 증가하는 순서로 배열되었을 것이라고 추측된다.
-즉, abc는 가능성이 있는 암호이지만 bac는 그렇지 않다.
-
-새 보안 시스템에서 조교들이 암호로 사용했을 법한 문자의 종류는 C가지가 있다고 한다.
-C개의 문자들이 모두 주어졌을 때, 가능성 있는 암호들을 모두 구하는 프로그램을 작성하시오.
- */
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.StringTokenizer;
-
+    실수 목록
+    1) HashSet 자료형
+    2) 문자 하나씩 입력 받기 - st.nextToken().charAt(0)
+    3) DFS 체크인/체크아웃 조건 - 자음/모음 개수 check
+    4) answer 배열 따로 두기
+    5) answer 배열 크기
+    6) 중복이 없어야하기 때문에 answer는 체크아웃 하지 않는다
+    7) dfs 처음 호출 시 매개값 -1로 시작
+*/
 public class Main {
 
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static StringBuilder sb = new StringBuilder();
     static StringTokenizer st;
-    static StringBuilder sb;
-
-    static HashSet<Character> vowel = new HashSet<>(Arrays.asList('a', 'e', 'i', 'o', 'u'));
-
+    static HashSet<Character> vowel = new HashSet<>(List.of('a', 'e', 'i', 'o', 'u'));
     static int L, C;
-
-    static boolean[] visited;
-
     static char[] input;
-
     static char[] answer;
+    static int countV;
+    static int countC;
 
-    static void input() throws IOException {
+    public static void main(String[] args) throws IOException {
         st = new StringTokenizer(br.readLine());
-        sb = new StringBuilder();
-
         L = Integer.parseInt(st.nextToken());
         C = Integer.parseInt(st.nextToken());
 
         input = new char[C];
-        visited = new boolean[C];
         answer = new char[L];
 
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < C; i++) {
-            input[i] = st.nextToken().charAt(0);
-        }
+            input[i] = st.nextToken().charAt(0); // !!! 문자 입력받을 때 !!!
 
+        }
         Arrays.sort(input);
 
+        dfs(0, -1); // -1을 매개값으로 넣어줘야 현재 Character의 인덱스가 0부터 시작할 수 있다.
+        System.out.println(sb);
+
     }
 
-    static void pro() {
-        dfs(-1, 0, 0, 0);
-
-        System.out.println(sb.substring(0, sb.length() - 1));
-    }
-
-    static void dfs(int current, int ja, int mo, int length) {
-        // 1. 체크인 - 생략 가능
-        // 2. 목적지인가?
-        if (length == L) {
-            if (mo >= 1 && ja >= 2) {
+    static void dfs(int len, int current) {
+        // 1. 목적지인가?
+        if (len == L) {
+            if (countV >= 1 && countC >= 2) {
                 sb.append(answer).append("\n");
             }
         } else {
-            // 3. 연결된 곳 순회 current ~ C
-            for (int i = current + 1; i < C; i++) {
-                // 4. 갈 수 있는가? - 생략 가능
-                // 5. 간다. dfs
-                answer[length] = input[i];
-                if (vowel.contains(input[i])){
-                    dfs(i, ja, mo + 1, length + 1);
+            // 2. 연결된 곳인가? - 생략
+            // 3. 갈 수 있는가?
+            for (int idx = current + 1; idx < C; idx++) {
+
+                // 현재 Character이 자음인지 체크
+                boolean isVowel = false;
+                if (vowel.contains(input[idx])) {
+                    isVowel = true;
+                }
+
+                // 4. 체크인 - 자음/모음 개수 저장
+                if (isVowel) {
+                    countV++;
                 } else {
-                    dfs(i, ja + 1 , mo, length + 1);
+                    countC++;
+                }
+
+                // 현재 Character 저장
+                answer[len] = input[idx];
+
+                // 5. 간다 dfs
+                dfs(len + 1, idx);
+
+                // 6. 체크아웃 - 자음/모음 개수 저장했던거 원상복귀
+                if (isVowel) {
+                    countV--;
+                } else {
+                    countC--;
                 }
             }
         }
-
-        // 6. 체크아웃 - 생략 가능
-    }
-
-    public static void main(String[] args) throws IOException {
-        input();
-        pro();
     }
 }
