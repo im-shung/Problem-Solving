@@ -1,6 +1,9 @@
 import java.io.*;
 import java.util.*;
 
+/*
+코드 업그레이드: 스택 사용
+ */
 public class Main {
 
     static class Node implements Comparable<Node> {
@@ -25,50 +28,37 @@ public class Main {
     static StringBuilder sb = new StringBuilder();
     static int N;
     static Deque<Node> que = new ArrayDeque<>();
-    static PriorityQueue<Node> priorityQue = new PriorityQueue<>();
-    static int[] ans;
+    static int[] ans, A;
 
     static void input() throws IOException {
         st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
 
         st = new StringTokenizer(br.readLine());
+        A = new int[N + 1];
         ans = new int[N + 1];
         for (int i = 1; i <= N; i++) {
-            que.add(new Node(Integer.parseInt(st.nextToken()), i));
+            A[i] = Integer.parseInt(st.nextToken());
         }
     }
 
     public static void pro() {
-        Node pre = que.peekLast();
-
-        // idx = N ~ 1 순서로 원소를 꺼낸다.
-        while (!que.isEmpty()) {
-            Node cur = que.pollLast();
-
-            // idx탑이 idx+1탑보다 크다면, idx+1탑의 신호를 수신한 탑은 idx이다.
-            // idx탑이 idx+1탑보다 작다면, priorityQue에 넣는다.
-            if (cur.height > pre.height) {
-                ans[pre.idx] = cur.idx;
-            } else {
-                priorityQue.add(pre);
+        // 탑을 뒤에서부터 스택에 삽입한다.
+        for (int i = N; i > 0; i--) {
+            // curHeight := i번째 탑 높이
+            int curHeight = A[i];
+            while (!que.isEmpty()) {
+                Node last = que.peekFirst();
+                // i번째 탑이 i + a번째 탑보다 높으면, ans[i + a] = i 를 기록한다.
+                if (curHeight >= last.height) {
+                    que.pollFirst();
+                    ans[last.idx] = i;
+                } else { // 그렇지 않으면 break. i + a번째 탑보다 뒤에 있는 탑들은 i + a보다 높이가 높다.
+                    break;
+                }
             }
-
-            // priorityQue는 자신보다 높은 탑을 찾지 못한 원소들이 들어있다. 
-            // priorityQue에 원소가 있고, 현재 높이가 원소 높이보다 크면 현재idx를 기록한다.
-            while (priorityQue.size() > 0 && priorityQue.peek().height < cur.height) {
-                Node node = priorityQue.poll();
-                ans[node.idx] = cur.idx;
-            }
-
-            // 현재 탑보다 높으면서, 인덱스가 가장 가까운 탑을 찾는다.
-            pre = cur;
-        }
-
-        // priorityQue에 원소가 남아있다면, 자신보다 높은 탑이 없다는 것이므로 0을 기록한다.
-        while (!priorityQue.isEmpty()) {
-            Node node = priorityQue.poll();
-            ans[node.idx] = 0;
+            // i번째 탑을 que에 삽입한다 !
+            que.addFirst(new Node(curHeight, i));
         }
 
         for (int i = 1; i <= N; i++) {
