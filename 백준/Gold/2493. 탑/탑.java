@@ -6,7 +6,7 @@ import java.util.*;
  */
 public class Main {
 
-    static class Node implements Comparable<Node> {
+    static class Node{
 
         int height;
         int idx;
@@ -16,11 +16,6 @@ public class Main {
             this.idx = idx;
         }
 
-
-        @Override
-        public int compareTo(Node o) {
-            return this.height - o.height;
-        }
     }
 
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
