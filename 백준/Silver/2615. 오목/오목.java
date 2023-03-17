@@ -19,7 +19,7 @@ public class Main {
 	static int[][] map = new int[SIZE][SIZE];
 	static boolean[][][] visit = new boolean[SIZE][SIZE][4];
 	
-	static int[] answer = {SIZE, SIZE};
+	static int[] answer = {-1, -1, -1};
 	static boolean winFlag;
 	
 	public static void main(String[] args)  throws Exception {
@@ -35,7 +35,7 @@ public class Main {
 		
 		/* 출력 */
 		if (winFlag) {
-			sb.append(map[answer[0]][answer[1]]).append("\n")
+			sb.append(answer[2]).append("\n")
 			.append(++answer[0]).append(" ").append(++answer[1]);
 			System.out.println(sb);
 		}
@@ -58,32 +58,27 @@ public class Main {
 	public static void find(int y, int x) {
 		for (int d = 0; d < 4; d++) {
 			if (!visit[y][x][d]) {
-				int[] location = new int[2];
-				count(map[y][x], y, x, d, 1, location);
-				if (winFlag) {
-					if (d != 3) {
-						answer[0] = y;
-						answer[1] = x;
-					} else {
-						answer[0] = location[0];
-						answer[1] = location[1];
+				answer[0] = y; answer[1] = x; answer[2] = map[y][x];
+				count(map[y][x], y, x, d, 1);
+				if (!winFlag) {
+					answer[0] = -1; answer[1] = -1;
+				} else {
+					if (d == 3) {
+						answer[0] += 4;
+						answer[1] -= 4;
 					}
 					return;
-				} else {
-					answer[0] = -1; answer[1] = -1;
 				}
 			}
 		}
 	}
 	
 	// 그래프 탐색  
-	public static void count(int val, int y, int x, int d, int cnt, int[] location) {
+	public static void count(int val, int y, int x, int d, int cnt) {
 
 		if (map[y][x] != val || visit[y][x][d]) return;
-		if (cnt == 5) location[0] = y; location[1] = x;
-		winFlag = (cnt == 5) ? true : false;
+		winFlag = cnt == 5 ? true : false;
 		visit[y][x][d] = true;
-		// 제일 왼쪽에 있는 바둑알의 위치가 정답이다.
 		int dy = y + DIR[d][0];
 		int dx = x + DIR[d][1];
 		if (cannotGo(dy, dx) || visit[dy][dx][d]) return;
@@ -92,7 +87,7 @@ public class Main {
 //		System.out.println("cnt=" + cnt  + "\n");
 		
 		// 간다.
-		count(val, dy, dx, d, cnt + 1, location);
+		count(val, dy, dx, d, cnt + 1);
 	}
 
 	private static boolean cannotGo(int y, int x) {
