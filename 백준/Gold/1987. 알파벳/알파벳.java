@@ -46,17 +46,13 @@ public class Main {
 		st = new StringTokenizer(br.readLine());
 		R = Integer.parseInt(st.nextToken());
 		C = Integer.parseInt(st.nextToken());
-		map = new char[R + 1][C + 1];
-		for (int i = 1; i <= R; i++) {
-			String line = br.readLine();
-			for (int j = 1; j <= C; j++) {
-				map[i][j] = line.charAt(j - 1);
-			}
+		map = new char[R][C];
+		for (int i = 0; i < R; i++) {
+			map[i] = br.readLine().toCharArray();
 		}
-//		System.out.println(Arrays.deepToString(map));
 		/* 처리 */
 
-		find(1, 1, 1);
+		find(0, 0, 1);
 		
 		/* 출력 */
 		System.out.println(ans);
@@ -78,11 +74,9 @@ public class Main {
 		
 	}
 	
-	
-		
-	
+
 	private static boolean canNotGo(int y, int x) {
-		return (y < 1 || y > R || x < 1 || x > C);
+		return (y < 0 || y >= R || x < 0 || x >= C);
 	}
 
 }
