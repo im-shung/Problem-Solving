@@ -31,6 +31,7 @@ public class Main {
 		}
 
 		for (int i = 0; i < N; i++) {
+			visited = new boolean[N];
 			DFS(i, 1);
 			if (ans == 1) {
 				System.out.println(ans);
@@ -41,15 +42,16 @@ public class Main {
 	}
 
 	private static void DFS(int curr, int cnt) {
-		visited[curr] = true;
+		
 		
 		if (cnt == 5) {
 			ans = 1;
-            return;
+			return;
 		}
-		
+		visited[curr] = true;
 		for (int node : adjList[curr]) {
 			if (!visited[node]) {
+				visited[node] = true;
 				DFS(node, cnt + 1);
 			}
 		}
