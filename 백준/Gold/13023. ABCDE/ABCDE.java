@@ -1,61 +1,77 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Main {
-	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	static StringTokenizer st;
 
-	static int N, M;
-	static ArrayList<Integer>[] adjList;
-	static boolean[] visited;
-	static int ans;
+    static int N, M, answer;
+    static boolean isOk;
+    static Node[] adjList;
+    static boolean[] isVisited;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-	public static void main(String[] args) throws Exception {
-		st = new StringTokenizer(br.readLine());
-		N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
 
-		adjList = new ArrayList[N];
-		visited = new boolean[N];
+        adjList = new Node[N];
+        for (int i = 0; i < M; i++) {
+            st = new StringTokenizer(br.readLine());
+            int from = Integer.parseInt(st.nextToken());
+            int to = Integer.parseInt(st.nextToken());
+            adjList[from] = new Node(to, adjList[from]);
+            adjList[to] = new Node(from, adjList[to]);
+        }
 
-		for (int i = 0; i < N; i++) {
-			adjList[i] = new ArrayList<>();
-		}
+        for (int i = 0; i < N; i++) {
+            isOk = false;
+            isVisited = new boolean[N];
+            dfs(i, 0);
+            if (check()) {
+                answer = 1;
+                break;
+            }
+        }
 
-		for (int i = 0; i < M; i++) {
-			st = new StringTokenizer(br.readLine());
-			int v1 = Integer.parseInt(st.nextToken());
-			int v2 = Integer.parseInt(st.nextToken());
-			adjList[v1].add(v2);
-			adjList[v2].add(v1);
-		}
+        System.out.println(answer);
+    }
 
-		for (int i = 0; i < N; i++) {
-			visited = new boolean[N];
-			DFS(i, 1);
-			if (ans == 1) {
-				System.out.println(ans);
-				return;
-			}
-		}
-		System.out.println(0);
-	}
+    private static boolean check() {
+        if (isOk) {
+            return true;
+        }
+        return false;
+    }
 
-	private static void DFS(int curr, int cnt) {
-		
-		
-		if (cnt == 5) {
-			ans = 1;
-			return;
-		}
-		visited[curr] = true;
-		for (int node : adjList[curr]) {
-			if (!visited[node]) {
-				visited[node] = true;
-				DFS(node, cnt + 1);
-			}
-		}
-		visited[curr] = false;
-	}
+    private static void dfs(int idx, int cnt) {
 
+        if (cnt == 4) {
+            isOk = true;
+            return;
+        }
+
+        isVisited[idx] = true;
+        for (Node temp = adjList[idx]; temp != null; temp = temp.next) {
+            if (isVisited[temp.value]) {
+                continue;
+            }
+
+            isVisited[temp.value] = true;
+            dfs(temp.value, cnt + 1);
+        }
+        isVisited[idx] = false;
+    }
+
+    private static class Node {
+        int value;
+        Node next;
+
+        public Node(int value, Node next) {
+            this.value = value;
+            this.next = next;
+        }
+    }
 }
