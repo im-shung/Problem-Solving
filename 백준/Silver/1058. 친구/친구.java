@@ -4,11 +4,9 @@ import java.util.*;
 public class Main {
 
 	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	static StringTokenizer st;
-	static StringBuilder sb;
 
-    static final int MAX = 51;
-    
+	static final int MAX = 51;
+	
 	static int N;
 	static ArrayList<Integer>[] adjList;
 	static boolean[] visit;
@@ -38,7 +36,6 @@ public class Main {
 			dfs(i, 0);
 			// 방문했던 친구의 수를 셉니다.
 			ans = Math.max(ans, checkTwoFriend(i)); 
-			//System.out.println("=======");
 		}
 	}
 	
@@ -62,6 +59,7 @@ public class Main {
 		}
 		// 친구의 친구들을 탐색합니다.
 		for (int nxt : adjList[x]) {
+			// 65라인
 			dfs(nxt, cnt + 1);
 		}
 		// 동일인물을 방문하면 안 되기 때문에 visit[x] = false는 실행하지 않습니다.
@@ -78,3 +76,37 @@ public class Main {
 		br.close();
 	}
 }
+
+
+/*
+65 라인에 
+if (!visit[nxt]) 
+	dfs(nxt, cnt + 1); 
+
+이미 방문한 곳을 재방문하지 않는다면 문제가 있다.
+
+<<map>>
+NYYNYN
+YNYNNN
+YYNYNN
+NNYNNN
+YNNNNY
+NNNNYN
+
+0은 dfs(1) -> dfs(2)를 거쳐서 1과 2를 방문한다.
+그리고 돌아와서 2는 이미 방문 표시가 되어 방문하지 않는다.
+그러나 dfs(2) -> dfs(3)으로... 3을 갈 수 있는 기회를 놓친다.
+
+ */
+
+
+/*
+ 6
+NYYNYN
+YNYNNN
+YYNYNN
+NNYNNN
+YNNNNY
+NNNNYN
+5
+ */
