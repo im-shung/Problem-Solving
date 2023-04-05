@@ -43,16 +43,13 @@ class Solution {
         int max = numbers[n-1];
         int maxLen = (max+"").length();
 
-        // test
-        System.out.println(maxLen);
         
         // 최대길이만큼의 자릿수배열을 갖는 Element를 생성한다.
         Element[] elements = new Element[n];
         for (int i = 0; i < n; i++) {
             elements[i] = new Element(numbers[i] + "", maxLen);
         }
-        //test
-        System.out.println(Arrays.toString(elements));
+
         // 정렬 
         Arrays.sort(elements);
         
