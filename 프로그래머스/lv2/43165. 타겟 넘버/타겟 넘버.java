@@ -1,28 +1,29 @@
 class Solution {
+    static int n ;
     static int count = 0;
+    static int[] snumbers;
+    static int starget;
     
     public int solution(int[] numbers, int target) {
+        n = numbers.length;
+        snumbers = numbers;
+        starget = target;
         
-        dfs(numbers, 0, 0, target);
+        dfs(0, 0, 0);
         return count;
     }
     
-    void dfs(int[] numbers, int idx, int result, int target) {
-        // 1. 체크인
-        // 2. 목적지인가?
-        if (idx == numbers.length) {
-            if (result == target) {
-                count++;
-            }
-        } else {
-            // 3. 연결된 곳인가?
-            // 4. 갈 수 있는가?
-            // 5. 간다.
-            dfs(numbers, idx + 1, result + numbers[idx], target);
-            dfs(numbers, idx + 1, result - numbers[idx], target);
+    private void dfs(int depth, int startIdx, int answer) {
+        if (depth == n) {
+            if (answer == starget) count++;
+            return;
         }
         
+        for (int i = startIdx; i < n; i++) {
+            dfs(depth + 1, i + 1, answer + snumbers[i]);
+            dfs(depth + 1, i + 1, answer - snumbers[i]);
+        }
         
-        // 6. 체크아웃
     }
+        
 }
