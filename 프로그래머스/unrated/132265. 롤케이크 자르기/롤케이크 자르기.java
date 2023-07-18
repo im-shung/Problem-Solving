@@ -2,31 +2,26 @@ import java.util.*;
 
 class Solution {
     public int solution(int[] topping) {
-        HashSet<Integer> set = new HashSet<>();
-        int N = topping.length;
-        int[] arr1 = new int[N];
-        int[] arr2 = new int[N];
+        HashSet<Integer> hs = new HashSet<>();
+        int n = topping.length;
+        int[] a1 = new int[n];
+        int[] a2 = new int[n];
         
-        for(int i = 0; i < N; i++) {
-            set.add(topping[i]);
-            arr1[i] = set.size();
+        for(int i=0; i<n; i++){
+            hs.add(topping[i]);
+            a1[i] = hs.size();
         }
-        
-        set.clear();
-        
-        for (int i = N - 1; i >= 0; i--) {
-            set.add(topping[i]);
-            arr2[i] = set.size();
+        hs.clear();
+        for(int i=n-1; i>-1; i--){
+            hs.add(topping[i]);
+            a2[i] = hs.size();
         }
-        
         int answer = 0;
-        for (int i = 0; i < N - 1; i++) {
-            if (arr1[i] == arr2[i + 1]) {
+        for(int i=0; i<n-1; i++){
+            if(a1[i] == a2[i+1]){
                 answer++;
             }
         }
-        
-
         return answer;
     }
 }
